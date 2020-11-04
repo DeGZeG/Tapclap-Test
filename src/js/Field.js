@@ -27,13 +27,8 @@ export default class Field {
     }
 
     randomColor() {
-        switch(Math.floor(Math.random() * this.colorsCount)){
-            case 0: return 'blue'
-            case 1: return 'green'
-            case 2: return 'purple'
-            case 3: return 'red'
-            case 4: return 'yellow'
-        }
+        let colors = ['blue', 'green', 'purple', 'red', 'yellow']
+        return colors[Math.floor(Math.random() * this.colorsCount)]
     }
 
     burnGroup(group) {

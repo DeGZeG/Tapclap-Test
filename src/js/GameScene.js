@@ -72,6 +72,14 @@ export default class MenuScene extends Phaser.Scene {
                 this.shuffleField()
                 this.field.shuffleCount -= 1
                 shuffleBonusCount.setText(this.field.shuffleCount)
+
+                let maxGroup = 0
+                for (let i = 0; i < this.field.groups.length; i++) {
+                    if (this.field.groups[i].count > maxGroup) maxGroup = this.field.groups[i].count
+                }
+                if (this.field.shuffleCount === 0 && maxGroup < this.field.bombGroup) {
+                    this.endGame('lose')
+                }
             }
         })
 
@@ -219,7 +227,7 @@ export default class MenuScene extends Phaser.Scene {
                     if (this.field.score >= this.field.pointsToWin) {
                         this.endGame('win')
                     }
-                    else if (this.field.shuffleCount === 0 && maxGroup < this.field.bombGroup || this.field.turnsCount === 0) {
+                    else if (this.field.shuffleCount === 0 && maxGroup < this.field.minGroup || this.field.turnsCount === 0) {
                         this.endGame('lose')
                     }
                 }
@@ -323,7 +331,7 @@ export default class MenuScene extends Phaser.Scene {
 
         let tween = this.tweens.add({
             targets: this.cameras.main,
-            duration: 1000,
+            duration: 2000,
             ease: 'Bounce',
             scrollY: -window.innerHeight,
         });
