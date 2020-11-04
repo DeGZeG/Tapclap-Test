@@ -1,1 +1,11 @@
 @import './utils/reset';
+
+@font-face {
+  font-family: Marvin;
+  src: url('../fonts/marvin.otf') format('OpenType');
+  font-weight: normal;
+}
+
+body {
+  font-family: "Marvin", sans-serif;
+}

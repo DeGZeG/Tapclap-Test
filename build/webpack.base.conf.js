@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PATHS = {
     src: path.join(__dirname, '../src'),
-    dist: path.join(__dirname, '../dist'),
+    dist: path.join(__dirname, '../docs'),
     static: ''
 };
 
@@ -78,6 +78,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: `${PATHS.src}/img`, to: `${PATHS.dist}/img` },
+                { from: `${PATHS.src}/fonts`, to: `${PATHS.dist}/fonts` },
                 { from: `${PATHS.src}/static`, to: `` }
             ]
         })
