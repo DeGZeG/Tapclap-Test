@@ -9,6 +9,7 @@ export default class OptionsScene extends Phaser.Scene {
 
     create() {
         const x = this.cameras.main.centerX, y = this.cameras.main.centerY
+        const optionsStyle = {font: '26px Marvin', fill: '#002f80'}
 
         const titleText = this.add.text(
             x, y - 300,
@@ -19,7 +20,7 @@ export default class OptionsScene extends Phaser.Scene {
         const turnsCount = new Option(
             this, x, y - 200,
             'Количество ходов:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'turnsCount',
             1,
@@ -29,7 +30,7 @@ export default class OptionsScene extends Phaser.Scene {
         const pointsToWin = new Option(
             this, x, y - 150,
             'Количество очков для победы',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'pointsToWin',
             10,
@@ -39,7 +40,7 @@ export default class OptionsScene extends Phaser.Scene {
         const fieldRows = new Option(
             this, x, y - 100,
             'Количество строк:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'fieldRows',
             1,
@@ -49,7 +50,7 @@ export default class OptionsScene extends Phaser.Scene {
         const fieldCols = new Option(
             this, x, y - 50,
             'Количество столбцов:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'fieldCols',
             1,
@@ -59,7 +60,7 @@ export default class OptionsScene extends Phaser.Scene {
         const colorsCount = new Option(
             this, x, y,
             'Количество цветов:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'colorsCount',
             1,
@@ -69,7 +70,7 @@ export default class OptionsScene extends Phaser.Scene {
         const minGroup = new Option(
             this, x, y + 50,
             'Минимальная группа для сжигания:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'minGroup',
             1,
@@ -79,7 +80,7 @@ export default class OptionsScene extends Phaser.Scene {
         const shuffleCount = new Option(
             this, x, y + 100,
             'Количество перемешиваний:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'shuffleCount',
             1,
@@ -89,7 +90,7 @@ export default class OptionsScene extends Phaser.Scene {
         const bombRadius = new Option(
             this, x, y + 150,
             'Радиус бомбы:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'bombRadius',
             1,
@@ -99,7 +100,7 @@ export default class OptionsScene extends Phaser.Scene {
         const bombCount = new Option(
             this, x, y + 200,
             'Количество бонусных бомб:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'bombCount',
             1,
@@ -109,7 +110,7 @@ export default class OptionsScene extends Phaser.Scene {
         const bombGroup = new Option(
             this, x, y + 250,
             'Минимальная группа для появления бомбы:',
-            {font: '26px Marvin', fill: '#002f80'},
+            optionsStyle,
             this.gameSettings,
             'bombGroup',
             1,

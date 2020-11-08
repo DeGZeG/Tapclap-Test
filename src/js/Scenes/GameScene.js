@@ -4,26 +4,26 @@ import MenuButton from "../PhaserComponents/MenuButton";
 import ScorePanel from "../PhaserComponents/ScorePanel";
 import Bonus from "../PhaserComponents/Bonus";
 
+const TILE_SIZE = 50
+
 export default class MenuScene extends Phaser.Scene {
     constructor() {
         super('Game');
     }
 
     create() {
-        this.fieldBackground = this.add.image(
-            this.cameras.main.centerX - 300,
-            this.cameras.main.centerY, 'field')
-        .setScale(0.3)
-        this.tilesFieldMask = new Phaser.Display.Masks.BitmapMask(this, this.fieldBackground)
-
         this.myGame = new Game(this.gameSettings)
 
-        this.tileImagesGroup = this.add.group()
-        this.tileImages = []
-        for (let i = 0; i < this.myGame.fieldCols; i++) {
-            this.tileImages.push(new Array(this.myGame.fieldRows).fill(null))
-        }
+        //Field ------------------------------------------------
+        this.fieldBackground = this.add.image(
+            this.cameras.main.centerX - 300,
+            this.cameras.main.centerY,
+            'field')
+            .setScale(0.3)
+        this.tilesFieldMask = new Phaser.Display.Masks.BitmapMask(this, this.fieldBackground)
+        //-------------------------------------------------------
 
+        //Score and bonuses -------------------------------------
         this.scorePanel = new ScorePanel(
             this,
             this.cameras.main.centerX + 100,
@@ -32,10 +32,11 @@ export default class MenuScene extends Phaser.Scene {
             this.myGame.turnsCount
         )
 
+        const bonusesY = this.scorePanel.getBottomCenter().y + 100
         this.shuffleBonus = new Bonus(
             this,
             this.scorePanel.getTopLeft().x + 80,
-            this.scorePanel.getBottomCenter().y + 100,
+            bonusesY,
             'bonus',
             'Перемешать',
             this.myGame.shuffleCount
@@ -51,7 +52,7 @@ export default class MenuScene extends Phaser.Scene {
         this.bombBonus = new Bonus(
             this,
             this.scorePanel.getTopRight().x - 80,
-            this.scorePanel.getBottomCenter().y + 100,
+            bonusesY,
             'bonus',
             'Бомба',
             this.myGame.bombCount
@@ -61,42 +62,59 @@ export default class MenuScene extends Phaser.Scene {
                 this.bombBonus.toggleActive()
             }
         })
+        //--------------------------------------------------------
+
+        //End game menu ------------------------------------------
+        const endgameX = this.cameras.main.centerX
+        const endgameY = this.cameras.main.centerY - window.innerHeight
+        const endgameButtonsStyle = {font: '26px Marvin', fill: '#FFFFFF'}
 
         this.resultText = this.add.text(
-            this.cameras.main.centerX,
-            this.cameras.main.centerY - window.innerHeight - 300,
+            endgameX,
+            endgameY - 300,
             'Результат',
             {font: '52px Marvin', fill: '#002f80'}
         ).setOrigin(0.5)
 
         const newGame = new MenuButton(
-            this,
-            this.cameras.main.centerX,
-            this.cameras.main.centerY - window.innerHeight - 100,
+            this, endgameX, endgameY - 100,
             'Заново',
-            {font: '26px Marvin', fill: '#FFFFFF'},
+            endgameButtonsStyle,
             true
         )
-        .setInteractive()
         .on('pointerdown', () => {
             this.scene.start('Game')
         })
 
         const toMenu = new MenuButton(
-            this,
-            this.cameras.main.centerX,
-            this.cameras.main.centerY - window.innerHeight - 30,
+            this, endgameX, endgameY - 30,
             'В меню',
-            {font: '26px Marvin', fill: '#FFFFFF'},
+            endgameButtonsStyle,
             true
         )
-        .setInteractive()
         .on('pointerdown', () => {
             this.scene.start('Menu')
         })
+        //---------------------------------------------------------
+
+        // Init ---------------------------------------------------
+        this.tileImagesGroup = this.add.group()
+        this.tileImages = []
+        for (let i = 0; i < this.myGame.fieldCols; i++) {
+            this.tileImages.push(new Array(this.myGame.fieldRows).fill(null))
+        }
+
+        const fieldCenter = this.fieldBackground.getCenter()
+        const cols = this.myGame.fieldCols
+        const rows = this.myGame.fieldRows
+        this.tileOrigin = {}
+        this.tileOrigin.x = fieldCenter.x - cols*TILE_SIZE/2 + TILE_SIZE/2
+        this.tileOrigin.y = fieldCenter.y - rows*TILE_SIZE/2 + TILE_SIZE/2
 
         this.fillField()
+        // --------------------------------------------------------
 
+        // Tiles click handler
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             if (this.tileImagesGroup.contains(gameObject)) {
                 let tile = gameObject.data.list.tile
@@ -119,26 +137,24 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     calcTileImagePosition(tile) {
-        const fieldCenter = this.fieldBackground.getCenter()
-        const cols = this.myGame.fieldCols
-        const rows = this.myGame.fieldRows
-        const x = fieldCenter.x+tile.i*50-cols*50/2+25
-        const y = fieldCenter.y+tile.j*50-rows*50/2+25
+        const x = this.tileOrigin.x + tile.i * TILE_SIZE
+        const y = this.tileOrigin.y + tile.j * TILE_SIZE
         return {x, y}
     }
 
     createTileImage(tile, dist) {
         return new Promise(resolve => {
             let {x, y} = this.calcTileImagePosition(tile)
-            let startY = y - 50*(dist-tile.j) - Math.abs(y-this.fieldBackground.getTopCenter().y) - 25
 
-            const newTileImage = this.add.image(x, startY, tile.type+'Tile')
+            let startY = y - TILE_SIZE*(dist - tile.j) - Math.abs(y - this.fieldBackground.getTopCenter().y) - TILE_SIZE/2
+
+            const newTileImage = this.add.image(x, startY, tile.type + 'Tile')
                 .setScale(0.3)
-                .setDepth(this.myGame.fieldRows-tile.j)
+                .setDepth(this.myGame.fieldRows - tile.j)
                 .setData({tile})
                 .setMask(this.tilesFieldMask)
 
-            resolve({tileImage: newTileImage, dist: Math.abs(startY-y)})
+            resolve({tileImage: newTileImage, dist: Math.abs(startY - y)})
         })
     }
 
@@ -146,7 +162,7 @@ export default class MenuScene extends Phaser.Scene {
         return new Promise(resolve => {
             const {x, y} = this.calcTileImagePosition(tile)
 
-            let newSuperTileImage = this.add.image(x, y, tile.type+'Tile')
+            let newSuperTileImage = this.add.image(x, y, tile.type + 'Tile')
                 .setScale(0.5)
                 .setAlpha(0)
                 .setDepth(this.myGame.fieldRows)
@@ -194,7 +210,7 @@ export default class MenuScene extends Phaser.Scene {
             this.tileImages[i][j+dist] = tileImage
 
             tileImage.setDepth(this.myGame.fieldRows-(j+dist))
-            fallPromises.push(this.fallTileImage(tileImage, dist*50))
+            fallPromises.push(this.fallTileImage(tileImage, dist * TILE_SIZE))
         }
 
         //потом добавляем новые тайлы
