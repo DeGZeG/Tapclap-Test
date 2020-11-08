@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import MenuScene from "./MenuScene"
-import OptionsScene from "./OptionsScene";
-import GameScene from "./GameScene"
+import MenuScene from "./Scenes/MenuScene"
+import OptionsScene from "./Scenes/OptionsScene";
+import GameScene from "./Scenes/GameScene"
 
 class GameSettings extends Phaser.Plugins.BasePlugin {
     constructor(pluginManager) {
@@ -16,7 +16,7 @@ class GameSettings extends Phaser.Plugins.BasePlugin {
         this.shuffleCount = 3
         this.bombRadius = 1
         this.bombCount = 3
-        this.bombGroup = 5
+        this.bombGroup = 6
     }
 }
 

@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import MenuButton from "./MenuButton";
+import MenuButton from "../PhaserComponents/MenuButton";
 
 let Texts = {
     Title: 'Tapclap Test Game',

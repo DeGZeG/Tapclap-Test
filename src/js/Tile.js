@@ -1,8 +1,8 @@
 export default class Tile {
-    constructor(i, j, color, group) {
+    constructor(i, j, type, group) {
         this.i = i
         this.j = j
-        this.color = color
+        this.type = type
         this.group = group
         group.addTile(this)
     }
@@ -13,5 +13,9 @@ export default class Tile {
 
     changeGroupFromTile(tile) {
         tile.group.addTile(this)
+    }
+
+    setGroup(group) {
+        this.group = group
     }
 }

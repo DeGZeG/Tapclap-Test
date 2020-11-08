@@ -6,14 +6,25 @@ export default class TileGroup {
     }
 
     addTile(tile) {
-        tile.group = this
-        this.tiles.push(tile)
-        this.count++
+        if (!this.tiles.includes(tile)) {
+            tile.group = this
+            this.tiles.push(tile)
+            this.count++
+        }
+    }
+
+    addTileWithoutGroup(tile) {
+        if (!this.tiles.includes(tile)) {
+            this.tiles.push(tile)
+            this.count++
+        }
     }
 
     deleteTile(tile) {
-        this.tiles = this.tiles.filter(tl => tl !== tile)
-        this.count--
+        if (!this.tiles.includes(tile)) {
+            this.tiles = this.tiles.filter(tl => tl !== tile)
+            this.count--
+        }
     }
 
     deleteGroup() {
